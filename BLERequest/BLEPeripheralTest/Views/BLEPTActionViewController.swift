@@ -36,8 +36,8 @@ class BLEPTActionViewController: UIViewController {
   @IBOutlet weak var collectionView: UICollectionView!
 
   let CELL_REUSE_IDENTIFIER = "BLEPTActionCollectionCell"
-  let CELL_WIDTH = 80.0
-  let CELL_HEIGHT = 36.0
+  let CELL_WIDTH_SPACE: CGFloat = 10.0
+  let CELL_HEIGHT: CGFloat = 36.0
 
   private func setViews() {
     setCollectionView()
@@ -92,6 +92,8 @@ extension BLEPTActionViewController: UICollectionViewDelegate, UICollectionViewD
   }
 
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: CELL_WIDTH, height: CELL_HEIGHT)
+    let action = actions[indexPath.row]
+    let dynamicSize = NSString(string: action.name).size(withAttributes: nil)
+    return CGSize(width: dynamicSize.width + CELL_WIDTH_SPACE, height: CELL_HEIGHT)
   }
 }
