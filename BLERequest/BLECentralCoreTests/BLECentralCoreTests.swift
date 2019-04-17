@@ -1,15 +1,15 @@
 //
-//  BLERequestTests.swift
-//  BLERequestTests
+//  BLECentralCoreTests.swift
+//  BLECentralCoreTests
 //
-//  Created by Tianyun Shan on 2019-04-11.
+//  Created by Tianyun Shan on 2019-04-15.
 //  Copyright © 2019 Hourglass Lab. All rights reserved.
 //
 
 import XCTest
-@testable import BLERequest
+@testable import BLECentralCore
 
-class BLERequestTests: XCTestCase {
+class BLECentralCoreTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
