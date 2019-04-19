@@ -32,28 +32,26 @@ class BLEPeripheralCore: NSObject {
   }() // Use to receive request from the central (mac client)
   
   // Private Class Variable
-  private let DEVICE_NAME: String
+  private var _device: String?
   
   // *******************************
   //
   // MARK: Initialization
   //
   // *******************************
-  
-  init(deviceName: String) {
-    self.DEVICE_NAME = deviceName
-    super.init()
-  }
-  
+
   /**
    Before using `BLEPeripheralCore`, call setup to setup bluetooth.
+
+   - Parameter device: The name of the device. Name used when advertising service.
    */
-  public func setup() {
+  public func setup(device: String) {
     // NOTE: Init order matters.
     // TODO: I don't like this lazy method. Change to optional variables and setup the detail here. Reason is if we forgot to setup, we can catch the issue later.
     _ = _peripheralManager // init peripheral manager
     _ = _service // init service and characteristic.
     _ = _dataChunkManager // init the data chunk manager. This need to wait until peripheral manager and service finish init.
+    _device = device
   }
   
   // *******************************
@@ -68,10 +66,14 @@ class BLEPeripheralCore: NSObject {
    - Set to `true` on `didUpdateState` when bluetooth state is `poweredOn`
    */
   private func setAdvertising(isEnable: Bool) {
+    guard let device = _device else {
+      BLEDebugUtils.p(l: .wtf, t: "Device name not found. Please call setup before doing anything else.")
+      return
+    }
     if isEnable {
       _peripheralManager.startAdvertising( [
         CBAdvertisementDataServiceUUIDsKey: [CBUUID(string: BLEUUID.SERVICE_UUID)],
-        CBAdvertisementDataLocalNameKey: DEVICE_NAME
+        CBAdvertisementDataLocalNameKey: device
         ])
       BLEDebugUtils.p(l: .d, t: "Bluetooth Peripheral Start Advertising.")
     } else {

@@ -32,6 +32,10 @@
 		9D99AF22226796DD009FF7AB /* BLEPTActionCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D99AF1B2267904F009FF7AB /* BLEPTActionCollectionCell.swift */; };
 		9D99AF2322679783009FF7AB /* BLEPTActionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9D99AF1A2267904F009FF7AB /* BLEPTActionViewController.xib */; };
 		9D99AF242267978C009FF7AB /* BLEPTActionCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9D99AF192267904F009FF7AB /* BLEPTActionCollectionCell.xib */; };
+		9D99AF422267B848009FF7AB /* BLERequestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D99AF402267B848009FF7AB /* BLERequestType.swift */; };
+		9D99AF432267B848009FF7AB /* BLERequestApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D99AF412267B848009FF7AB /* BLERequestApi.swift */; };
+		9D99AF452267B8EC009FF7AB /* BLEPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D99AF442267B8EC009FF7AB /* BLEPeripheral.swift */; };
+		9D99AF472267B903009FF7AB /* BLECentral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D99AF462267B903009FF7AB /* BLECentral.swift */; };
 		9DF3D487226037A8002C7ED0 /* BLEPeripheralCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF3D486226037A8002C7ED0 /* BLEPeripheralCore.swift */; };
 		9DF3D48A22603859002C7ED0 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DF3D48922603859002C7ED0 /* CoreBluetooth.framework */; };
 		9DF3D48D22603BE7002C7ED0 /* BLEDebugUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF3D48C22603BE7002C7ED0 /* BLEDebugUtils.swift */; };
@@ -76,6 +80,10 @@
 		9D99AF1A2267904F009FF7AB /* BLEPTActionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BLEPTActionViewController.xib; sourceTree = "<group>"; };
 		9D99AF1B2267904F009FF7AB /* BLEPTActionCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPTActionCollectionCell.swift; sourceTree = "<group>"; };
 		9D99AF1C2267904F009FF7AB /* BLEPTMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPTMainViewController.swift; sourceTree = "<group>"; };
+		9D99AF402267B848009FF7AB /* BLERequestType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLERequestType.swift; sourceTree = "<group>"; };
+		9D99AF412267B848009FF7AB /* BLERequestApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLERequestApi.swift; sourceTree = "<group>"; };
+		9D99AF442267B8EC009FF7AB /* BLEPeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPeripheral.swift; sourceTree = "<group>"; };
+		9D99AF462267B903009FF7AB /* BLECentral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLECentral.swift; sourceTree = "<group>"; };
 		9DF3D486226037A8002C7ED0 /* BLEPeripheralCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPeripheralCore.swift; sourceTree = "<group>"; };
 		9DF3D48922603859002C7ED0 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		9DF3D48C22603BE7002C7ED0 /* BLEDebugUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDebugUtils.swift; sourceTree = "<group>"; };
@@ -218,9 +226,21 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		9D99AF3F2267B848009FF7AB /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				9D99AF402267B848009FF7AB /* BLERequestType.swift */,
+				9D99AF412267B848009FF7AB /* BLERequestApi.swift */,
+				9D99AF442267B8EC009FF7AB /* BLEPeripheral.swift */,
+				9D99AF462267B903009FF7AB /* BLECentral.swift */,
+			);
+			path = Api;
+			sourceTree = "<group>";
+		};
 		9DF3D48222603672002C7ED0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9D99AF3F2267B848009FF7AB /* Api */,
 				9DF3D48322603711002C7ED0 /* Core */,
 			);
 			path = Models;
@@ -451,13 +471,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				9DF3D48D22603BE7002C7ED0 /* BLEDebugUtils.swift in Sources */,
+				9D99AF432267B848009FF7AB /* BLERequestApi.swift in Sources */,
+				9D99AF422267B848009FF7AB /* BLERequestType.swift in Sources */,
 				9DF3D4A1226427D9002C7ED0 /* BLEString.swift in Sources */,
 				9DF3D49F2264238E002C7ED0 /* BLEDataReceiveManager.swift in Sources */,
 				9DF3D49622618A7E002C7ED0 /* BLEDataChunkManager.swift in Sources */,
+				9D99AF472267B903009FF7AB /* BLECentral.swift in Sources */,
 				9DF3D49422617F79002C7ED0 /* BLEDataUtils.swift in Sources */,
 				9DF3D487226037A8002C7ED0 /* BLEPeripheralCore.swift in Sources */,
 				9DF3D49A2263E8BB002C7ED0 /* BLECentralCore.swift in Sources */,
 				9DF3D49222617E07002C7ED0 /* BLEDataChunk.swift in Sources */,
+				9D99AF452267B8EC009FF7AB /* BLEPeripheral.swift in Sources */,
 				9DF3D49C2263EAC9002C7ED0 /* BLEUUID.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
