@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    BLERequestApi.setup(requestType: .peripheral, device: UIDevice.current.name)
+    BLERequestApi.peripheral.setup(device: UIDevice.current.name)
     return true
   }
 

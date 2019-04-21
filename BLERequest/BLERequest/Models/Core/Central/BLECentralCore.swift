@@ -12,29 +12,93 @@ import CoreBluetooth
 class BLECentralCore: NSObject {
   private var _centralManager: CBCentralManager?
   private var _receiveManager: BLEDataReceiveManager?
+
+  private var _isScan: Bool = false
+  private var _isPoweredOn: Bool = false
   
   // Saved peripherals
-  private var _discovered: [CBPeripheral] = []
+  private var _discovered: [CBPeripheral] = [] // TODO: Remove from the list if expired or connected failed.
   private var _connected: CBPeripheral?
   
   // Saved characteristics
   private var _response: CBCharacteristic?
   private var _request: CBCharacteristic?
-  
-  public func setup() {
+
+  // Expose variable
+  /**
+   All peripheral that has been discovered.
+   */
+  public var discovered: [CBPeripheral] {
+    get {
+      return _discovered
+    }
+  }
+
+  /**
+   Check if there is a peripheral connected to central. Connected means connect to peripheral, discovered service, have response characteristic notified and request characteristic discoverd.
+   */
+  public var isConnected: Bool {
+    get {
+      return (_connected != nil) && (_response != nil) && (_request != nil)
+    }
+  }
+
+  /**
+   If you want to receive response from the `BLECentralCore`, assign `BLECentralActionDelegate` here.
+   */
+  public weak var delegate: BLECentralActionDelegate?
+
+  /**
+   Call this function to setup the central. Setup is required before doing anything else.
+   */
+  internal func setup() {
     _centralManager = CBCentralManager(delegate: self, queue: nil)
     _receiveManager = BLEDataReceiveManager()
   }
-  
-  private func scan() {
+
+  /**
+   Call this function to start scan for peripheral.
+
+   - Returns: `true` if start scan. `false` if scan failed.
+   */
+  internal func scan() -> Bool {
+    guard !_isScan else {
+      BLEDebugUtils.p(l: .e, t: "Function scan called, but already scan.")
+      return false
+    }
+    guard let _centralManager = _centralManager else {
+      BLEDebugUtils.p(l: .wtf, t: "Please call setup before scan.")
+      return false
+    }
+    _centralManager.scanForPeripherals(withServices: [CBUUID(string: BLEUUID.SERVICE_UUID)], options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
+    _isScan = true
+    delegate?.scanStateChanged(isScan: true)
+    return false
+  }
+
+  /**
+   Call this function to stop scan for peripheral.
+   */
+  internal func stopScan() {
+    guard _isScan else {
+      BLEDebugUtils.p(l: .e, t: "Function stop scan called, but not yet start scan.")
+      return
+    }
     guard let _centralManager = _centralManager else {
       BLEDebugUtils.p(l: .wtf, t: "Please call setup before scan.")
       return
     }
-    _centralManager.scanForPeripherals(withServices: [CBUUID(string: BLEUUID.SERVICE_UUID)], options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
+    _isScan = false
+    delegate?.scanStateChanged(isScan: false)
+    _centralManager.stopScan()
   }
-  
-  private func connect(_ peripheral: CBPeripheral) {
+
+  /**
+   Call this function to init the connect process.
+
+   - Parameter peripheral: A peripheral object. You can get from the discovered list.
+   */
+  internal func connect(_ peripheral: CBPeripheral) {
     guard let _centralManager = _centralManager else {
       BLEDebugUtils.p(l: .wtf, t: "Please call setup before connect.")
       return
@@ -48,21 +112,21 @@ class BLECentralCore: NSObject {
     BLEDebugUtils.p(l: .d, t: "Connect to \(peripheral.name ?? "nil")")
     _centralManager.connect(peripheral, options: nil)
   }
-  
-  
 }
 
 extension BLECentralCore: CBCentralManagerDelegate {
   func centralManagerDidUpdateState(_ central: CBCentralManager) {
     switch central.state {
     case .poweredOn:
-      scan()
+      _isPoweredOn = true
       return
     case .poweredOff:
       // TODO: Message to user to start bluetooth.
+      _isPoweredOn = false
       return
     case .resetting, .unauthorized, .unknown, .unsupported:
       BLEDebugUtils.p(l: .wtf, t: "Bluetooth is not supported.")
+      _isPoweredOn = false
       @unknown default:
       return
     }
@@ -76,6 +140,7 @@ extension BLECentralCore: CBCentralManagerDelegate {
     if (!_discovered.contains(peripheral)) {
       BLEDebugUtils.p(l: .d, t: "Discover peripheral: \(name), at RSSI: \(RSSI)")
       _discovered.append(peripheral)
+      delegate?.didDiscover(peripherals: _discovered)
     }
   }
   
@@ -136,6 +201,8 @@ extension BLECentralCore: CBPeripheralDelegate {
         _request = characteristic
       }
     }
+
+    delegate?.connectedStateChanged(isConnected: isConnected)
   }
   
   func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {

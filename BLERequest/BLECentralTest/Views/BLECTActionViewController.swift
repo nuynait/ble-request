@@ -22,10 +22,10 @@ class BLECTActionViewController: UIViewController {
 
   override func viewDidLoad() {
     setViews()
+  }
 
-    // init model and view for the first version.
-    updateModel()
-    updateView()
+  override func viewDidAppear(_ animated: Bool) {
+    BLECTNotification.main.addObserverAndPost(type: .action, observer: self, selector: #selector(updateFromNotification(sender:)))
   }
 
   // *******************************
@@ -67,6 +67,11 @@ class BLECTActionViewController: UIViewController {
 
   func updateView() {
     collectionView.reloadData()
+  }
+
+  @objc func updateFromNotification(sender: NSNotification) {
+    updateModel()
+    updateView()
   }
 
 }
